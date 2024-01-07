@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 	public static UIManager instance;
-	public Slider HeatSlider;
-	public Slider AmountSlider;
+	public Slider heatSlider;
+	public Slider amountSlider;
 	private void Awake()
 	{
 		instance = this;

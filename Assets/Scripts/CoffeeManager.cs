@@ -14,11 +14,11 @@ public class CoffeeManager : MonoBehaviour
 	/// <summary>
 	/// Awake is called when the script instance is being loaded.
 	/// </summary>
-	void Awake()
+	void Start()
 	{
 		ShowCup(false);
 		BuyCoffee();
-		Drink(0);
+		ConsumeDrink(0f);
 	}
 
 	private void Update()
@@ -26,25 +26,37 @@ public class CoffeeManager : MonoBehaviour
 		if (coffeeHeat > 0)
 		{
 			coffeeHeat -= Time.deltaTime;
-			UIManager.instance.HeatSlider.value = coffeeHeat / startCoffeeHeat;
+			UIManager.instance.heatSlider.value = coffeeHeat / startCoffeeHeat;
 		}
 	}
 
-	public void Drink(float drinkAmount)
+	void ShowCup(bool enable)
 	{
-		coffeeAmount -= drinkAmount;
-		UIManager.instance.AmountSlider.value = coffeeAmount / startCoffeeAmount;
+		coffeeCup.gameObject.SetActive(enable);
 	}
 
-	private void BuyCoffee()
+	void BuyCoffee()
 	{
 		ShowCup(true);
 		coffeeAmount = startCoffeeAmount;
 		coffeeHeat = startCoffeeHeat;
 	}
 
-	void ShowCup(bool enable)
+	public void ConsumeDrink(float consumeAmount)
 	{
-		coffeeCup.gameObject.SetActive(enable);
+		if (coffeeAmount > 0)
+		{
+			coffeeAmount -= consumeAmount;
+			UIManager.instance.amountSlider.value = coffeeAmount / startCoffeeAmount;
+		}
+	}
+	public bool DrinkAvailable()
+	{
+		return coffeeAmount > 0;
+	}
+
+	void DrinkFinished()
+	{
+		Debug.Log("Finished drinking coffee without getting caught! Won!");
 	}
 }

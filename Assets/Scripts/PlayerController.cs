@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 	private float animMultiplier;
 	private Animator animator;
 	CoffeeManager coffeeManager;
-
+	[HideInInspector] public bool caught;
 	private void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -32,17 +32,26 @@ public class PlayerController : MonoBehaviour
 
 	private void Update()
 	{
-		if (true) //replace true by "game running boolean" and uncomment else statement
+		if (!coffeeManager.DrinkAvailable())
+		{
+			rb.velocity = new Vector3(0, rb.velocity.y, 0);
+			Quaternion targetRotation = Quaternion.LookRotation(Vector3.back + new Vector3(0, 0, 0.00001f));
+			transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime);
+			return;
+		}
+
+		if (GameManager.instance.gameStarted && !GameManager.instance.gameEnded) //replace true by "game running boolean" and uncomment else statement
 		{
 			direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 			isMoving = !(direction.x == 0 && direction.y == 0);
 		}
-		//else
-		//{
-		//    isMoving = false;
-		//    //added 0.00001 to prevent "Look Rotation Viewing Vector Is Zero" error on console because it consumes a lot of FPS
-		//    lastRotation = Quaternion.LookRotation(Vector3.zero + new Vector3(0, 0, 0.00001f));
-		//}
+		else
+		{
+			rb.velocity = new Vector3(0, rb.velocity.y, 0);
+			Quaternion targetRotation = Quaternion.LookRotation(Vector3.back + new Vector3(0, 0, 0.00001f));
+			transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime);
+			return;
+		}
 		ChooseDirection();
 		ChooseRotation();
 		if (Input.GetKeyDown(KeyCode.LeftCommand) || Input.GetKeyDown(KeyCode.RightCommand))
@@ -50,9 +59,14 @@ public class PlayerController : MonoBehaviour
 			Drink();
 		}
 		//Keep falling commented until replaced with drinking coffee
-		if (IsDrinking())
+		if (coffeeManager && IsDrinking())
 		{
-			coffeeManager.Drink(Time.deltaTime);
+			coffeeManager.ConsumeDrink(Time.deltaTime);
+			if (!coffeeManager.DrinkAvailable())
+			{
+				animator.SetBool("Drinking", false);
+				animator.SetBool("Dance", true);
+			}
 		}
 		Move();
 	}
@@ -87,10 +101,10 @@ public class PlayerController : MonoBehaviour
 			animator.SetBool("isRunning", false);
 		}
 	}
-	
+
 	void Drink()
 	{
-		if (!isMoving && !IsDrinking())
+		if (!isMoving && !IsDrinking() && coffeeManager.DrinkAvailable())
 		{
 			Debug.Log("Started Drinking...");
 			animator.SetBool("Drinking", true);
@@ -115,7 +129,7 @@ public class PlayerController : MonoBehaviour
 		if (isMoving && canMove)
 		{
 			//added 0.00001 to prevent "Look Rotation Viewing Vector Is Zero" error on console because debug messages are bad for performance
-			transform.rotation = Quaternion.LookRotation(-targetDirection + new Vector3(0, 0, 0.00001f));
+			transform.rotation = Quaternion.LookRotation(targetDirection + new Vector3(0, 0, 0.00001f));
 			lastRotation = transform.rotation;
 		}
 		else
@@ -129,8 +143,20 @@ public class PlayerController : MonoBehaviour
 		return animator.GetCurrentAnimatorStateInfo(0).IsName("Start Drinking") || animator.GetCurrentAnimatorStateInfo(0).IsName("Continue Drinking");
 	}
 
+	//private bool IsGrounded()
+	//{
+	//	return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.0001f);
+	//}
 	private bool IsGrounded()
 	{
-		return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.0001f);
+		float radius = 0.5f; // Adjust the radius based on your character's size
+
+		// Use SphereCast to check if there's any ground below the object
+		if (Physics.SphereCast(transform.position, radius, -Vector3.up, out _, distToGround + 0.0001f))
+		{
+			return true;
+		}
+
+		return false;
 	}
 }
