@@ -179,7 +179,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Drinking
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: isRunning
+    m_ConditionEvent: Run
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5914002165990239659}
@@ -230,7 +230,7 @@ AnimatorController:
   m_Name: Player Animator
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: isRunning
+  - m_Name: Run
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -279,7 +279,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Drinking
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: isRunning
+    m_ConditionEvent: Run
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5914002165990239659}
@@ -362,7 +362,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isRunning
+    m_ConditionEvent: Run
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5914002165990239659}
@@ -390,7 +390,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Drinking
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isRunning
+    m_ConditionEvent: Run
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3582845039534771037}
@@ -415,7 +415,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isRunning
+    m_ConditionEvent: Run
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3582845039534771037}
@@ -496,7 +496,7 @@ AnimatorStateTransition:
     m_ConditionEvent: Drinking
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: isRunning
+    m_ConditionEvent: Run
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3582845039534771037}

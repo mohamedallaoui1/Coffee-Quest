@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 	private Animator animator;
 	CoffeeManager coffeeManager;
 	[HideInInspector] public bool caught;
+	
 	private void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
@@ -86,19 +87,19 @@ public class PlayerController : MonoBehaviour
 			// animator.SetFloat("runMultiplier", animMultiplier);
 			if (isMoving)
 			{
-				animator.SetBool("isRunning", true);
+				animator.SetBool("Run", true);
 				animator.SetBool("Drinking", false);
 			}
 			else
 			{
-				animator.SetBool("isRunning", false);
+				animator.SetBool("Run", false);
 			};
 		}
 		else
 		{
 			rb.velocity = new Vector3(0, rb.velocity.y, 0);
 			// animator.SetFloat("runMultiplier", 1);
-			animator.SetBool("isRunning", false);
+			animator.SetBool("Run", false);
 		}
 	}
 
@@ -116,10 +117,6 @@ public class PlayerController : MonoBehaviour
 	// Decide which direction to go
 	private void ChooseDirection()
 	{
-		//lines below need refining sinceforward camera rotation affects player speed
-		// camDirection = Camera.main.transform.rotation * direction; //This takes all 3 axes (good for something flying in 3d space)    
-		// targetDirection = new Vector3(camDirection.x, 0, camDirection.z); //This line removes the "space ship" 3D flying effect. We take the cam direction but remove the y axis value
-
 		targetDirection = new Vector3(direction.x, 0, direction.y).normalized; //Irrelevant to the Camera, Uses only input
 	}
 
@@ -138,7 +135,7 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	bool IsDrinking()
+	public bool IsDrinking()
 	{
 		return animator.GetCurrentAnimatorStateInfo(0).IsName("Start Drinking") || animator.GetCurrentAnimatorStateInfo(0).IsName("Continue Drinking");
 	}
@@ -147,16 +144,12 @@ public class PlayerController : MonoBehaviour
 	//{
 	//	return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.0001f);
 	//}
+
 	private bool IsGrounded()
 	{
 		float radius = 0.5f; // Adjust the radius based on your character's size
 
 		// Use SphereCast to check if there's any ground below the object
-		if (Physics.SphereCast(transform.position, radius, -Vector3.up, out _, distToGround + 0.0001f))
-		{
-			return true;
-		}
-
-		return false;
+		return (Physics.SphereCast(transform.position, radius, -Vector3.up, out _, distToGround + 0.0001f));
 	}
 }

@@ -49,7 +49,7 @@ public class StaffAIController : MonoBehaviour
 					navMeshAgent.SetDestination(target.transform.position);
 				}
 				Rotate();
-				animator.SetBool("isRunning", !reachedTarget);
+				animator.SetBool("Run", !reachedTarget);
 			}
 		}
 		lastPos = transform.position;
